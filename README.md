@@ -8,7 +8,7 @@ Adds tooltips beside each ESLint rule.
 
 <p align="left">
   <br />
-  <img src="https://raw.githubusercontent.com/dustinlacewell/vscode-eslintlens/master/images/screenshot-1.png" alt="ESLintLens Screenshot" width="300px" />
+  <img src="https://raw.githubusercontent.com/dustinlacewell/vscode-eslintlens/main/images/screenshot-1.png" alt="ESLintLens Screenshot" width="300px" />
   <br />
 </p>
 
