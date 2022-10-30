@@ -4,6 +4,10 @@
     "description": "Rule tooltips for your ESLint config.",
     "version": "0.0.1",
     "publisher": "ldlework",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dustinlacewell/vscode-eslintlens.git"
+    },
     "engines": {
         "vscode": "^1.72.0"
     },
