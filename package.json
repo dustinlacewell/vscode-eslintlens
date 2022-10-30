@@ -1,9 +1,12 @@
 {
     "name": "eslintlens",
-    "displayName": "eslintlens",
+    "displayName": "ESLintLens - Tooltips for ESLint rules",
     "description": "Rule tooltips for your ESLint config.",
     "version": "0.0.1",
     "publisher": "ldlework",
+    "author": {
+        "name": "ldlework"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/dustinlacewell/vscode-eslintlens.git"
