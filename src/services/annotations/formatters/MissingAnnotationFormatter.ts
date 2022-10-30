@@ -11,11 +11,11 @@ type MissingRuleAnnotation = RuleAnnotation & { data: undefined };
 export class MissingAnnotationFormatter extends BaseAnnotationFormatter {
 
     get icon() {
-        return '⚠️';
+        return this.config.errorIcon;
     }
 
     get iconColor() {
-        return this.config.defaultColor;
+        return this.config.errorColor;
     }
 
     getDescription(rule: MissingRuleAnnotation) {
