@@ -1,0 +1,95 @@
+{
+    "name": "eslintlens",
+    "displayName": "eslintlens",
+    "description": "Rule tooltips for your ESLint config.",
+    "version": "0.0.1",
+    "publisher": "ldlework",
+    "engines": {
+        "vscode": "^1.72.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "workspaceContains:**/.eslint*",
+        "workspaceContains:**/eslint.config.json",
+        "workspaceContains:**/package.json"
+    ],
+    "main": "./dist/extension.js",
+    "contributes": {
+        "configuration": {
+            "title": "ESLintLens",
+            "properties": {
+                "eslintlens.extraFiles": {
+                    "type": "array",
+                    "description": "Extra files to watch for changes.",
+                    "default": [],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "eslintlens.defaultColor": {
+                    "type": "string",
+                    "default": "#383737",
+                    "description": "The default color for lens icons."
+                },
+                "eslintlens.errorColor": {
+                    "type": "string",
+                    "default": "#782b2b",
+                    "description": "The color for error lens icons."
+                },
+                "eslintlens.defaultIcon": {
+                    "type": "string",
+                    "default": "ⓘ",
+                    "description": "The default icon for lens icons."
+                },
+                "eslintlens.errorIcon": {
+                    "type": "string",
+                    "default": "!",
+                    "description": "The icon for error lens icons."
+                },
+                "eslintlens.iconMargin": {
+                    "type": "number",
+                    "default": 3,
+                    "description": "The margin for lens icons."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "pnpm run package",
+        "compile": "webpack",
+        "watch": "webpack --watch",
+        "package": "webpack --mode production --devtool hidden-source-map",
+        "compile-tests": "tsc -p . --outDir out",
+        "watch-tests": "tsc -p . -w --outDir out",
+        "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "dependencies": {
+        "inversify": "^6.0.1",
+        "reflect-metadata": "^0.1.13",
+        "ts-morph": "^16.0.0"
+    },
+    "devDependencies": {
+        "@types/glob": "^8.0.0",
+        "@types/mocha": "^10.0.0",
+        "@types/node": "~16.18.2",
+        "@types/vscode": "^1.72.0",
+        "@typescript-eslint/eslint-plugin": "^5.38.1",
+        "@typescript-eslint/parser": "^5.38.1",
+        "@vscode/test-electron": "^2.1.5",
+        "eslint": "^8.24.0",
+        "eslint-plugin-import": "^2.26.0",
+        "eslint-plugin-import-newlines": "^1.2.3",
+        "eslint-plugin-simple-import-sort": "^8.0.0",
+        "eslint-plugin-unused-imports": "^2.0.0",
+        "glob": "^8.0.3",
+        "mocha": "^10.0.0",
+        "ts-loader": "^9.4.1",
+        "typescript": "^4.8.4",
+        "webpack": "^5.74.0",
+        "webpack-cli": "^4.10.0"
+    }
+}
