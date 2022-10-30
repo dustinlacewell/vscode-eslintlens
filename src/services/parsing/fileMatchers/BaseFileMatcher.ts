@@ -2,13 +2,13 @@ import { inject, injectable } from "inversify";
 import { languages, TextEditor, workspace } from "vscode";
 
 import { tokens } from "../../../tokens";
-import { Logger } from "../../../types";
+import { ILogger } from "../../logging";
 
 
 @injectable()
 export abstract class BaseFileMatcher {
-    @inject(tokens.Logger)
-    protected log!: Logger;
+    @inject(ILogger)
+    protected log!: ILogger;
 
     @inject(tokens.Configuration)
     protected config!: any;
@@ -34,7 +34,7 @@ export abstract class BaseFileMatcher {
 
     protected isExtraConfig(language: string) {
         const filename = this.editor.document.fileName.replace(this.workspaceRoot, '');
-        this.log(`Checking if ${filename} is an ESLint config in ${this.workspaceRoot}.`);
+        this.log.debug(`Checking if ${filename} is an ESLint config in ${this.workspaceRoot}.`);
         const isExtra = this.config.extraFiles.includes(filename);
         const isLanguageMatch = this.isMatch(language, '**/*');
         return isExtra && isLanguageMatch;

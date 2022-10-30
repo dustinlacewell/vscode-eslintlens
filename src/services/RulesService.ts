@@ -17,9 +17,16 @@ export class RulesService {
                 ? ruleName.directory
                 : "eslint";
         const pluginInfo = this.pluginService.getPlugin(packageName);
+
+        if (!pluginInfo) {
+            // TODO: Improve plugin failure handling
+            return new Rule(ruleName, undefined);
+        }
+
         const ruleData = pluginInfo.rules[ruleName.rule];
 
         if (!ruleData) {
+            // TODO: Improve missing rule handling
             return new Rule(ruleName, undefined);
         }
 

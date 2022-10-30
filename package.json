@@ -24,44 +24,86 @@
     ],
     "main": "./dist/extension.js",
     "contributes": {
-        "configuration": {
-            "title": "ESLintLens",
-            "properties": {
-                "eslintlens.extraFiles": {
-                    "type": "array",
-                    "description": "Extra files to watch for changes.",
-                    "default": [],
-                    "items": {
-                        "type": "string"
+        "configuration": [
+            {
+                "title": "Styling",
+                "properties": {
+                    "eslintlens.extraFiles": {
+                        "type": "array",
+                        "description": "Extra files to watch for changes.",
+                        "default": [],
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "eslintlens.defaultColor": {
+                        "type": "string",
+                        "default": "#383737",
+                        "description": "The default color for lens icons."
+                    },
+                    "eslintlens.errorColor": {
+                        "type": "string",
+                        "default": "#782b2b",
+                        "description": "The color for error lens icons."
+                    },
+                    "eslintlens.defaultIcon": {
+                        "type": "string",
+                        "default": "ⓘ",
+                        "description": "The default icon for lens icons."
+                    },
+                    "eslintlens.errorIcon": {
+                        "type": "string",
+                        "default": "!",
+                        "description": "The icon for error lens icons."
+                    },
+                    "eslintlens.iconMargin": {
+                        "type": "number",
+                        "default": 3,
+                        "description": "The margin for lens icons."
                     }
-                },
-                "eslintlens.defaultColor": {
-                    "type": "string",
-                    "default": "#383737",
-                    "description": "The default color for lens icons."
-                },
-                "eslintlens.errorColor": {
-                    "type": "string",
-                    "default": "#782b2b",
-                    "description": "The color for error lens icons."
-                },
-                "eslintlens.defaultIcon": {
-                    "type": "string",
-                    "default": "ⓘ",
-                    "description": "The default icon for lens icons."
-                },
-                "eslintlens.errorIcon": {
-                    "type": "string",
-                    "default": "!",
-                    "description": "The icon for error lens icons."
-                },
-                "eslintlens.iconMargin": {
-                    "type": "number",
-                    "default": 3,
-                    "description": "The margin for lens icons."
+                }
+            },
+            {
+                "title": "Logging",
+                "properties": {
+                    "eslintlens.logLevel": {
+                        "type": "string",
+                        "default": "info",
+                        "enum": [
+                            "info",
+                            "warn",
+                            "error",
+                            "debug"
+                        ],
+                        "enumDescriptions": [
+                            "Info",
+                            "Warn",
+                            "Error",
+                            "Debug"
+                        ],
+                        "description": "Log level for ESLintLens"
+                    },
+                    "eslintlens.debugParsing": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Parser Debug Logging",
+                        "description": "Include parsing info in debug logs?"
+                    },
+                    "eslintlens.debugPlugins": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Plugin Debug Logging",
+                        "description": "Include plugin loading info in debug logs?"
+                    },
+                    "eslintlens.debugAnnotations": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "Annotation Debug Logging",
+                        "description": "Include annotation info in debug logs?"
+                    }
                 }
             }
-        }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "pnpm run package",

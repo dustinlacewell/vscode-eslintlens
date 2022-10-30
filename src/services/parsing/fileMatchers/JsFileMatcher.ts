@@ -11,8 +11,8 @@ export class JsFileMatcher extends BaseFileMatcher {
         if (
             this.isExtraConfig('javascript') ||
             this.isExtraConfig('javascriptreact') ||
-            this.isMatch('javascript', '**/eslintrc.js') ||
-            this.isMatch('javascriptreact', '**/eslintrc.js')
+            this.isMatch('javascript', '**/.eslintrc.js', '**/eslintrc.js') ||
+            this.isMatch('javascriptreact', '**/.eslintrc.js', '**/eslintrc.js')
         ) {
             return JsParser;
         }

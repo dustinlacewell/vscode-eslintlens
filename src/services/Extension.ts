@@ -2,8 +2,8 @@ import { Container, inject, injectable } from "inversify";
 import { ExtensionContext, TextEditor, window, workspace } from 'vscode';
 
 import { tokens } from '../tokens';
-import { Logger } from "../types";
 import { LensService } from "./LensService";
+import { ILogger } from "./logging";
 
 
 @injectable()
@@ -15,15 +15,28 @@ export class Extension {
     @inject(tokens.ExtensionContext)
     private context!: ExtensionContext;
 
-    @inject(tokens.Logger)
-    private log!: Logger;
+    @inject(ILogger)
+    private log!: ILogger;
 
     activeEditor: TextEditor | undefined = undefined;
 
     activate() {
         this.activeEditor = window.activeTextEditor;
 
+        for (const document of workspace.textDocuments) {
+            this.log.debug(`Found document ${document.fileName}`);
+        }
+
+        workspace.onDidOpenTextDocument((document) => {
+            this.log.debug(`Opened document: ${document.fileName}`);
+        });
+
+        workspace.onDidCloseTextDocument((document) => {
+            this.log.debug(`Closed document: ${document.fileName}`);
+        });
+
         window.onDidChangeActiveTextEditor(editor => {
+            this.log.debug(`Changed active editor: ${editor?.document.fileName}`);
             this.activeEditor = editor;
             if (editor) {
                 this.parse(editor);
@@ -46,10 +59,11 @@ export class Extension {
             this.parse(this.activeEditor);
         }
 
-        this.log('eslintlens is now active.');
+        this.log.info('eslintlens is now active.');
     }
 
     parse(editor: TextEditor) {
+        this.log.debug(`Starting parsing on ${editor.document.fileName}...`);
         const subContainer = this.container.createChild();
 
         subContainer

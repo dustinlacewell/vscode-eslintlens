@@ -7,4 +7,8 @@ export const tokens = {
     FileMatchers: Symbol.for('FileMatchers'),
     DefaultFormatter: Symbol.for('DefaultFormatter'),
     MissingFormatter: Symbol.for('MissingFormatter'),
+
+    ParserLogger: Symbol.for('ParserLogger'),
+    PluginLogger: Symbol.for('PluginLogger'),
+    AnnotationLogger: Symbol.for('AnnotationLogger'),
 };

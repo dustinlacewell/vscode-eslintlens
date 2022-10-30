@@ -4,7 +4,7 @@ import { join } from "path";
 
 import { PluginInfo } from "../../objects";
 import { tokens } from "../../tokens";
-import { Logger } from "../../types";
+import { ILogger } from "../logging";
 import { WorkspaceService } from "../WorkspaceService";
 import { EslintService } from "./EslintService";
 import { PluginCache } from "./PluginCache";
@@ -24,27 +24,29 @@ export class PluginService {
     @inject(PluginCache)
     private cache!: PluginCache;
 
-    @inject(tokens.Logger)
-    private log!: Logger;
+    @inject(tokens.PluginLogger)
+    private log!: ILogger;
 
     getCachedPlugin(name: string) {
         return this.cache.get(name);
     }
 
     loadPlugin(pluginName: string) {
-        this.log(`Loading plugin ${pluginName}`);
+        this.log.debug(`Loading plugin ${pluginName}`);
 
         const workspacePath = this.workspaceService.getWorkspacePath();
 
         if (!workspacePath) {
-            throw new Error("Could not find workspace path");
+            this.log.error("Could not find workspace path");
+            return null;
         }
 
         const pluginPath = join(workspacePath, "node_modules", pluginName);
         let plugin = __non_webpack_require__(pluginPath);
 
         if (!plugin) {
-            throw new Error(`Could not load plugin: ${pluginName} from ${pluginPath}`);
+            this.log.error(`Could not load plugin: ${pluginName} from ${pluginPath}`);
+            return null;
         }
 
         const rulesRecord = {} as Record<string, Rule.RuleModule>;
@@ -58,12 +60,13 @@ export class PluginService {
     }
 
     loadEslint() {
-        this.log("Loading eslint");
+        this.log.debug("Loading eslint");
 
         const linter = this.eslintService.getLinter();
 
         if (!linter) {
-            throw new Error("Could not load ESLint");
+            this.log.error("Could not load ESLint");
+            return null;
         }
 
         const rules = linter.getRules();

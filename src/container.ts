@@ -1,8 +1,10 @@
 import { Container, interfaces } from "inversify";
-import { ExtensionContext, OutputChannel, window, workspace } from "vscode";
+import { ExtensionContext, window, workspace } from "vscode";
 
 import {
+    AnnotationLogger,
     AnnotationService,
+    ChannelLogger,
     DefaultAnnotationFormatter,
     EslintService,
     Extension,
@@ -12,19 +14,20 @@ import {
     LensService,
     MissingAnnotationFormatter,
     ParserFactory,
+    ParserLogger,
     PluginCache,
+    PluginLogger,
     PluginService,
     RulesService,
     WorkspaceService
 } from "./services";
+import { ILogger } from "./services/logging/ILogger";
 import { tokens } from "./tokens";
 
 
 let container: Container | null = null;
 
 export function createContainer(context: ExtensionContext) {
-
-    const config = workspace.getConfiguration('eslintlens');
 
     container = new Container();
 
@@ -41,27 +44,41 @@ export function createContainer(context: ExtensionContext) {
     container
         .bind(tokens.OutputChannel)
         .toConstantValue(
-            window.createOutputChannel('eslintlens')
+            window.createOutputChannel('ESLintLens')
         );
 
     container
         .bind(Extension)
-        .toSelf();
+        .toSelf()
+        .inSingletonScope();
+
+    container
+        .bind(ILogger)
+        .to(ChannelLogger)
+        .inSingletonScope();
+
+    container
+        .bind(tokens.AnnotationLogger)
+        .to(AnnotationLogger)
+        .inSingletonScope();
+
+    container
+        .bind(tokens.ParserLogger)
+        .to(ParserLogger)
+        .inSingletonScope();
+
+    container
+        .bind(tokens.PluginLogger)
+        .to(PluginLogger)
+        .inSingletonScope();
+
+    // Request Scope
 
     container
         .bind(JsParser)
-        .toSelf();
+        .toSelf()
+        .inRequestScope();
 
-    container
-        .bind(tokens.Logger)
-        .toConstantValue((msg: string) => {
-            if (container) {
-                const channel = container.get<OutputChannel>(tokens.OutputChannel);
-                channel.appendLine(msg);
-            }
-        });
-
-    // Request Scope
     container
         .bind(tokens.Configuration)
         .toDynamicValue(() => {
@@ -132,7 +149,7 @@ export function createContainer(context: ExtensionContext) {
     container
         .bind(tokens.FileMatchers)
         .to(JsFileMatcher)
-        .inSingletonScope();
+        .inRequestScope();
 
     return container;
 }

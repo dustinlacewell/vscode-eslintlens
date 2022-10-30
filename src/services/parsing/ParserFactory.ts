@@ -2,7 +2,7 @@ import { Container, inject, injectable, multiInject } from "inversify";
 import { languages, TextDocument, TextEditor, workspace } from 'vscode';
 
 import { tokens } from "../../tokens";
-import { Logger } from "../../types";
+import { ILogger } from "../logging";
 import { IFileMatcher } from "./fileMatchers";
 import { IParser } from "./parsers";
 
@@ -18,8 +18,8 @@ export class ParserFactory {
     @inject(tokens.Editor)
     private editor!: TextEditor;
 
-    @inject(tokens.Logger)
-    private log!: Logger;
+    @inject(ILogger)
+    private log!: ILogger;
 
     @inject(tokens.Configuration)
     private config!: any;
@@ -45,7 +45,7 @@ export class ParserFactory {
 
     isExtraConfig(language: string) {
         const filename = this.editor.document.fileName.replace(this.workspaceRoot, '');
-        this.log(`Checking if ${filename} is an ESLint config in ${this.workspaceRoot}.`);
+        this.log.debug(`Checking if ${filename} is an ESLint config in ${this.workspaceRoot}.`);
         const isExtra = this.config.extraFiles.includes(filename);
         const isLanguageMatch = this.isMatch(language, '**/*');
         return isExtra && isLanguageMatch;
