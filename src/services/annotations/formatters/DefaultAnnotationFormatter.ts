@@ -12,7 +12,7 @@ type ValidRuleAnnotation = RuleAnnotation & { data: Rule.RuleModule };
 export class DefaultAnnotationFormatter extends BaseAnnotationFormatter {
 
     get icon() {
-        return '🔎';
+        return this.config.defaultIcon;
     }
 
     get iconColor() {
