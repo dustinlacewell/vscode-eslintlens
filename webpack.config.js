@@ -31,7 +31,6 @@ const extensionConfig = {
         extensions: ['.ts', '.js']
     },
     module: {
-        noParse: [require.resolve('typescript/lib/typescript.js')],
         rules: [
             {
                 test: /\.ts$/,
