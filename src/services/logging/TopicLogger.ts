@@ -10,7 +10,7 @@ export abstract class TopicLogger extends ChannelLogger {
 
     protected log(msg: string, level: string) {
         if (this.topicActive()) {
-            super.log(`[${this.topicName}] ${msg}`, level);
+            super.log(`[${this.topicName()}] ${msg}`, level);
         }
     }
 }

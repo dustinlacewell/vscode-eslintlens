@@ -20,45 +20,68 @@ export class Extension {
 
     activeEditor: TextEditor | undefined = undefined;
 
-    activate() {
-        this.activeEditor = window.activeTextEditor;
-
-        for (const document of workspace.textDocuments) {
-            this.log.debug(`Found document ${document.fileName}`);
-        }
-
-        workspace.onDidOpenTextDocument((document) => {
-            this.log.debug(`Opened document: ${document.fileName}`);
-        });
-
-        workspace.onDidCloseTextDocument((document) => {
-            this.log.debug(`Closed document: ${document.fileName}`);
-        });
-
-        window.onDidChangeActiveTextEditor(editor => {
-            this.log.debug(`Changed active editor: ${editor?.document.fileName}`);
-            this.activeEditor = editor;
-            if (editor) {
-                this.parse(editor);
+    update() {
+        for (const editor of window.visibleTextEditors) {
+            if (editor && editor.document.fileName) {
+                if (editor.document.fileName.startsWith('extension-output')) {
+                    continue;
+                }
+                // check if filename is under workspace root
+                if (workspace.getWorkspaceFolder(editor.document.uri)) {
+                    this.log.info(`Updating ${editor.document.fileName}...`);
+                    this.parse(editor);
+                }
             }
+        }
+    }
+
+    activate() {
+        window.onDidChangeActiveTextEditor(editor => {
+            this.update();
+            // this.log.debug(`Changed active editor: ${editor?.document.fileName}`);
+
+            // if (!editor) {
+            //     this.activeEditor = undefined;
+            //     return;
+            // }
+
+            // if (!editor.document.fileName) {
+            //     this.activeEditor = undefined;
+            //     return;
+            // }
+
+            // this.activeEditor = editor;
+            // this.parse(editor);
+
         }, null, this.context.subscriptions);
 
         workspace.onDidChangeTextDocument(event => {
-            if (this.activeEditor && event.document === this.activeEditor.document) {
-                this.parse(this.activeEditor);
+            if (event.document.fileName) {
+                for (const editor of window.visibleTextEditors) {
+                    if (editor.document.fileName === event.document.fileName) {
+                        if (!editor.document.fileName.startsWith('extension-output')) {
+                            this.parse(editor);
+                        }
+                    }
+                }
             }
         }, null, this.context.subscriptions);
+
+        workspace.onDidCloseTextDocument(document => {
+            for (const editor of window.visibleTextEditors) {
+                if (!editor.document.fileName.startsWith('extension-output')) {
+                    this.parse(editor);
+                }
+            }
+        });
 
         workspace.onDidChangeConfiguration(event => {
-            if (this.activeEditor && event.affectsConfiguration('eslintlens')) {
-                this.parse(this.activeEditor);
+            if (event.affectsConfiguration('eslintlens')) {
+                this.update();
             }
         }, null, this.context.subscriptions);
 
-        if (this.activeEditor) {
-            this.parse(this.activeEditor);
-        }
-
+        this.update();
         this.log.info('eslintlens is now active.');
     }
 
