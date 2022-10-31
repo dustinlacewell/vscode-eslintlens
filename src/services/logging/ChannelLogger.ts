@@ -42,25 +42,25 @@ export class ChannelLogger {
     }
 
     public info(msg: string) {
-        if (this.level <= LogLevel.Info) {
+        if (this.level >= LogLevel.Info) {
             this.log(msg, 'info');
         }
     }
 
     public warn(msg: string) {
-        if (this.level <= LogLevel.Warn) {
+        if (this.level >= LogLevel.Warn) {
             this.log(msg, 'warn');
         }
     }
 
     public error(msg: string) {
-        if (this.level <= LogLevel.Error) {
+        if (this.level >= LogLevel.Error) {
             this.log(msg, 'error');
         }
     }
 
     public debug(msg: string) {
-        if (this.level <= LogLevel.Debug) {
+        if (this.level >= LogLevel.Debug) {
             this.log(msg, 'debug');
         }
     }
