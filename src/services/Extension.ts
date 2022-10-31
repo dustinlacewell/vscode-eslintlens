@@ -20,48 +20,31 @@ export class Extension {
 
     activeEditor: TextEditor | undefined = undefined;
 
+    isValid(editor: TextEditor) {
+        return (
+            editor && editor.document && editor.document.fileName &&
+            !editor.document.fileName.startsWith('extension-output')
+        );
+    }
+
     update() {
-        for (const editor of window.visibleTextEditors) {
-            if (editor && editor.document.fileName) {
-                if (editor.document.fileName.startsWith('extension-output')) {
-                    continue;
-                }
-                // check if filename is under workspace root
-                if (workspace.getWorkspaceFolder(editor.document.uri)) {
-                    this.log.info(`Updating ${editor.document.fileName}...`);
-                    this.parse(editor);
-                }
-            }
-        }
+        window.visibleTextEditors.forEach(editor => this.parse(editor));
     }
 
     activate() {
+        window.onDidChangeVisibleTextEditors(editor => {
+            this.update();
+        }, null, this.context.subscriptions);
+
         window.onDidChangeActiveTextEditor(editor => {
             this.update();
-            // this.log.debug(`Changed active editor: ${editor?.document.fileName}`);
-
-            // if (!editor) {
-            //     this.activeEditor = undefined;
-            //     return;
-            // }
-
-            // if (!editor.document.fileName) {
-            //     this.activeEditor = undefined;
-            //     return;
-            // }
-
-            // this.activeEditor = editor;
-            // this.parse(editor);
-
         }, null, this.context.subscriptions);
 
         workspace.onDidChangeTextDocument(event => {
             if (event.document.fileName) {
                 for (const editor of window.visibleTextEditors) {
                     if (editor.document.fileName === event.document.fileName) {
-                        if (!editor.document.fileName.startsWith('extension-output')) {
-                            this.parse(editor);
-                        }
+                        this.parse(editor);
                     }
                 }
             }
@@ -69,9 +52,7 @@ export class Extension {
 
         workspace.onDidCloseTextDocument(document => {
             for (const editor of window.visibleTextEditors) {
-                if (!editor.document.fileName.startsWith('extension-output')) {
-                    this.parse(editor);
-                }
+                this.parse(editor);
             }
         });
 
@@ -86,7 +67,11 @@ export class Extension {
     }
 
     parse(editor: TextEditor) {
-        this.log.debug(`Starting parsing on ${editor.document.fileName}...`);
+        if (!this.isValid(editor)) {
+            return;
+        }
+
+        this.log.debug(`Creating container for ${editor.document.fileName}.`);
         const subContainer = this.container.createChild();
 
         subContainer
@@ -97,6 +82,7 @@ export class Extension {
             .bind(tokens.Editor)
             .toConstantValue(editor);
 
+        this.log.debug(`Resolving LenService for ${editor.document.fileName}.`);
         const lens = subContainer.get(LensService);
         lens.handle();
     }
