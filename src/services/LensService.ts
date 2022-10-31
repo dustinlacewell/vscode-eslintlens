@@ -2,8 +2,8 @@
 import { inject, injectable } from "inversify";
 
 import { RuleAnnotation } from "../objects";
-import { AnnotationService } from "./annotations/AnnotationService";
-import { IParser } from "./parsing/parsers";
+import { AnnotationService } from "./annotations";
+import { IParser } from "./parsing";
 import { RulesService } from "./RulesService";
 
 

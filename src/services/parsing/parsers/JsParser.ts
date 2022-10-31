@@ -2,11 +2,15 @@ import { inject, injectable } from "inversify";
 import { Project, ts } from "ts-morph";
 import { TextEditor } from "vscode";
 
-import { ObjectLiteralExpression, Or, PropertyAssignment } from "../../../objects/astMatchers";
-import { BinaryExpression } from "../../../objects/astMatchers/BinaryExpression";
-import { Expression } from "../../../objects/astMatchers/Expression";
-import { Identifier } from "../../../objects/astMatchers/Identifier";
-import { PropertyAccessExpression } from "../../../objects/astMatchers/PropertyAccessExpression";
+import {
+    BinaryExpression,
+    Expression,
+    Identifier,
+    ObjectLiteralExpression,
+    Or,
+    PropertyAccessExpression,
+    PropertyAssignment
+} from "../../../objects";
 import { tokens } from '../../../tokens';
 import { IParser } from "./IParser";
 

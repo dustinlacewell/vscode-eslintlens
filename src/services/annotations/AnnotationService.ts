@@ -27,7 +27,7 @@ export class AnnotationService {
     applyAnnotations(rules: RuleAnnotation[]) {
 
         const decorations = rules.map<DecorationOptions>(rule => {
-            this.log.debug(`Applying annotation for rule ${rule.name.qualifiedName}`);
+            this.log.debug(`Formatting annotation for rule ${rule.name.qualifiedName}`);
             if (rule.data) {
                 return this.defaultFormatter.format(rule);
             }
