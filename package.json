@@ -1,8 +1,9 @@
 {
+    "version": "0.0.4",
     "name": "eslintlens",
     "displayName": "ESLintLens - Tooltips for ESLint rules",
     "description": "Rule tooltips for your ESLint config.",
-    "version": "0.0.4",
+    "icon": "icon.png",
     "publisher": "ldlework",
     "author": {
         "name": "ldlework"
