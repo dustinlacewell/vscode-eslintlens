@@ -7,7 +7,8 @@ import { ILogger } from "../../logging";
 
 @injectable()
 export abstract class BaseFileMatcher {
-    @inject(ILogger)
+
+    @inject(tokens.ParserLogger)
     protected log!: ILogger;
 
     @inject(tokens.Configuration)
@@ -34,7 +35,6 @@ export abstract class BaseFileMatcher {
 
     protected isExtraConfig(language: string) {
         const filename = this.editor.document.fileName.replace(this.workspaceRoot, '');
-        this.log.debug(`Checking if ${filename} is an ESLint config in ${this.workspaceRoot}.`);
         const isExtra = this.config.extraFiles.includes(filename);
         const isLanguageMatch = this.isMatch(language, '**/*');
         return isExtra && isLanguageMatch;

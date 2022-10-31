@@ -1,6 +1,8 @@
 import { inject, injectable } from "inversify";
 
 import { Rule, RuleName } from "../objects";
+import { tokens } from "../tokens";
+import { ILogger } from "./logging";
 import { PluginService } from "./plugins";
 
 
@@ -9,6 +11,9 @@ export class RulesService {
 
     @inject(PluginService)
     private pluginService!: PluginService;
+
+    @inject(tokens.PluginLogger)
+    private log!: ILogger;
 
     getRule(name: string) {
         const ruleName = new RuleName(name);
@@ -20,6 +25,7 @@ export class RulesService {
 
         if (!pluginInfo) {
             // TODO: Improve plugin failure handling
+            this.log.debug(`Plugin not found: ${ruleName.qualifiedPackage}`);
             return new Rule(ruleName, undefined);
         }
 
@@ -27,6 +33,7 @@ export class RulesService {
 
         if (!ruleData) {
             // TODO: Improve missing rule handling
+            this.log.info(`Rule not found: ${ruleName.qualifiedName}`);
             return new Rule(ruleName, undefined);
         }
 
