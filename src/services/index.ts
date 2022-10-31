@@ -5,5 +5,6 @@ export * from './logging';
 export * from './parsing';
 export * from './plugins';
 export * from './RulesService';
+export * from './treeview';
 export * from './WorkspaceService';
 

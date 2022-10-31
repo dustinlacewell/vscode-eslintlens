@@ -4,6 +4,7 @@ import { ExtensionContext, TextEditor, window, workspace } from 'vscode';
 import { tokens } from '../tokens';
 import { LensService } from "./LensService";
 import { ILogger } from "./logging";
+import { TreeviewProvider } from "./treeview";
 
 
 @injectable()
@@ -14,6 +15,9 @@ export class Extension {
 
     @inject(tokens.ExtensionContext)
     private context!: ExtensionContext;
+
+    @inject(TreeviewProvider)
+    private treeview!: TreeviewProvider;
 
     @inject(ILogger)
     private log!: ILogger;
@@ -85,5 +89,6 @@ export class Extension {
         this.log.debug(`Resolving LenService for ${editor.document.fileName}.`);
         const lens = subContainer.get(LensService);
         lens.handle();
+        this.treeview.refresh();
     }
 }

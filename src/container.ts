@@ -19,6 +19,7 @@ import {
     PluginLogger,
     PluginService,
     RulesService,
+    TreeviewProvider,
     WorkspaceService
 } from "./services";
 import { ILogger } from "./services/logging/ILogger";
@@ -49,6 +50,11 @@ export function createContainer(context: ExtensionContext) {
 
     container
         .bind(Extension)
+        .toSelf()
+        .inSingletonScope();
+
+    container
+        .bind(TreeviewProvider)
         .toSelf()
         .inSingletonScope();
 
@@ -122,7 +128,7 @@ export function createContainer(context: ExtensionContext) {
     container
         .bind(PluginCache)
         .toSelf()
-        .inRequestScope();
+        .inSingletonScope();
 
     container
         .bind(WorkspaceService)

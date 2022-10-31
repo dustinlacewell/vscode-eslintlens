@@ -105,7 +105,17 @@
                     }
                 }
             }
-        ]
+        ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "eslintRules",
+                    "name": "ESLint Rules",
+                    "icon": "media/dep.svg",
+                    "contextualTitle": "Package Explorer"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "pnpm run package",

@@ -20,4 +20,8 @@ export class PluginCache {
         return this.cache.has(name);
     }
 
+    keys() {
+        return Array.from(this.cache.keys());
+    }
+
 }
