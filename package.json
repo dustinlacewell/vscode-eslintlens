@@ -20,7 +20,8 @@
     "activationEvents": [
         "workspaceContains:**/.eslint*",
         "workspaceContains:**/eslint.config.json",
-        "workspaceContains:**/package.json"
+        "workspaceContains:**/package.json",
+        "workspaceContains:package.json"
     ],
     "main": "./dist/extension.js",
     "contributes": {
