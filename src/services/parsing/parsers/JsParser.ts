@@ -7,7 +7,6 @@ import {
     Expression,
     Identifier,
     ObjectLiteralExpression,
-    Or,
     PropertyAccessExpression,
     PropertyAssignment
 } from "../../../objects";
@@ -29,9 +28,9 @@ export class JsParser implements IParser {
                     right: Identifier("exports"),
                 }),
                 right: ObjectLiteralExpression([
-                    PropertyAssignment({
-                        identifier: Or(Identifier("rules"), Identifier("configs")),
-                    })
+                    // PropertyAssignment({
+                    //     identifier: Or(Identifier("rules"), Identifier("configs")),
+                    // })
                 ]),
             })
         ]);
@@ -92,7 +91,7 @@ export class JsParser implements IParser {
     }
 
     protected parsePropertyAssignment(node: ts.PropertyAssignment): { identifier: string, line: number } {
-        const identifier = node.getChildAt(0).getText();
+        const identifier = node.name.getText();
         const line = node.getSourceFile().getLineAndCharacterOfPosition(node.getStart()).line;
         return { identifier, line };
     }
