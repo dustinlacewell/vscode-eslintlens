@@ -10,6 +10,8 @@ import {
     Extension,
     IParser,
     JsFileMatcher,
+    JsonFileMatcher,
+    JsonParser,
     JsParser,
     LensService,
     MissingAnnotationFormatter,
@@ -86,6 +88,11 @@ export function createContainer(context: ExtensionContext) {
         .inRequestScope();
 
     container
+        .bind(JsonParser)
+        .toSelf()
+        .inRequestScope();
+
+    container
         .bind(tokens.Configuration)
         .toDynamicValue(() => {
             return workspace.getConfiguration('eslintlens');
@@ -155,6 +162,11 @@ export function createContainer(context: ExtensionContext) {
     container
         .bind(tokens.FileMatchers)
         .to(JsFileMatcher)
+        .inRequestScope();
+
+    container
+        .bind(tokens.FileMatchers)
+        .to(JsonFileMatcher)
         .inRequestScope();
 
     return container;
